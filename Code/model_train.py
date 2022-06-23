@@ -68,7 +68,6 @@ def mul_model():
     optimizer = Adam(lr=0.0002, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0001)
     input_one = Input(shape=(seq_len, 21))
 
-    # the third branch
     o_x = conv.Conv1D(filters=256, kernel_size=7,
                         activation='relu',
                         kernel_initializer='he_normal',
@@ -99,12 +98,6 @@ def mul_model():
     return MDCaps
 
 
-avg_acc = 0
-avg_sensitivity = 0
-avg_specificity = 0
-avg_mcc = 0
-avg_f1 = 0
-avg_precision = 0
 n_split = 10
 time = 0
 tprs = []
@@ -140,12 +133,7 @@ for train_index, val_index in KFold(n_splits=n_split).split(X_train):
     print('mcc:', mcc)
     print('f1', f1)
     print('precision:', precision)
-    avg_acc += acc
-    avg_sensitivity += sensitivity
-    avg_specificity += specificity
-    avg_mcc += mcc
-    avg_f1 += f1
-    avg_precision += precision
+
     # ###### AUC ######
     fpr, tpr, thresholds = roc_curve(true_label, pred_proba)
     tprs.append(interp(mean_fpr, fpr, tpr))
